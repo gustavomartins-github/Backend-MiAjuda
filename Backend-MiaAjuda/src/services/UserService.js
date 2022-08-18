@@ -100,7 +100,6 @@ class UserService {
     name,
     phone,
     notificationToken,
-    address,
     deviceId,
   }) {
     const user = await this.getUser({ email });
@@ -109,7 +108,6 @@ class UserService {
     user.name = name || user.name;
     user.phone = phone || user.phone;
     user.notificationToken = notificationToken || user.notificationToken;
-    user.address = address || user.address;
     user.deviceId = deviceId || user.deviceId;
 
     const result = await this.userRepository.update(user);

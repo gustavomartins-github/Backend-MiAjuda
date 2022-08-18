@@ -2,7 +2,6 @@ const { ObjectID } = require('mongodb');
 const BaseRepository = require('./BaseRepository');
 const Campaign = require('../models/Campaign');
 const EntitySchema = require('../models/Entity');
-const getLocation = require('../utils/getLocation');
 
 class CampaignRepository extends BaseRepository {
   constructor() {
@@ -57,8 +56,7 @@ class CampaignRepository extends BaseRepository {
 
     const campaigns = await super.$list(matchQuery, {}, populate);
     const campaignsWithDistances = campaigns.map((campaign) => {
-      const campaignLocation = getLocation(campaign);
-      campaign.distances = { campaignCoords: campaignLocation, coords };
+      campaign.distances = { campaignCoords: campaign.entity.location.coordinates, coords };
       return campaign.toObject();
     });
 

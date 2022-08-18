@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-const { cpf } = require('cpf-cnpj-validator');
+const { cnpj } = require('cpf-cnpj-validator');
 const Point = require('./Point');
-const { riskGroupsEnum } = require('./RiskGroup');
 
-const userSchema = new mongoose.Schema({
+const entitySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -18,26 +17,19 @@ const userSchema = new mongoose.Schema({
     unique: true,
     index: true,
   },
-  birthday: {
-    type: Date,
-    required: true,
-  },
-  cpf: {
+  cnpj: {
     type: String,
     required: true,
     unique: true,
     index: true,
     validate: {
-      validator: (v) => cpf.isValid(v),
-      message: (props) => `${props.value} não é um cpf válido`,
+      validator: (v) => cnpj.isValid(v),
+      message: (props) => `${props.value} não é um cnpj válido`,
     },
-  },
-  riskGroup: {
-    type: [String],
-    enum: [...Object.keys(riskGroupsEnum)],
   },
   photo: {
     type: String,
+    required: true,
   },
   notificationToken: {
     type: String,
@@ -45,21 +37,21 @@ const userSchema = new mongoose.Schema({
   address: {
     cep: {
       type: String,
+      required: true,
     },
     number: {
       type: Number,
+      required: true,
     },
     city: {
       type: String,
+      required: true,
     },
     state: {
       type: String,
+      required: true,
     },
     complement: String,
-  },
-  ismentalHealthProfessional: {
-    type: Boolean,
-    default: false,
   },
   location: {
     type: Point,
@@ -67,6 +59,7 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
+    required: true,
   },
   registerDate: {
     type: Date,
@@ -76,6 +69,6 @@ const userSchema = new mongoose.Schema({
     default: true,
     type: Boolean,
   },
-}, { collection: 'user' });
+}, { collection: 'entity' });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Entity', entitySchema);
